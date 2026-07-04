@@ -1,0 +1,4 @@
+1.grep -r
+2.ps/top
+3.kill
+4.diff
