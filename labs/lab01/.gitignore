@@ -4,3 +4,6 @@ int_hello
 segfault_ex
 no_segfault_ex
 test_ll_cycle
+.vscode/
+*.o
+*.out
