@@ -1,7 +1,7 @@
-1.
-2.
-3.
-4.
-5.
-6.
-7.
+1.The target clean deletes all compiled programs and object files.
+2.The target all build all compiled excutable binaries at once.
+3.The compiler being used is gcc.
+4.The C standard specified is C99.
+5.Reference variable FOO with the syntax $(FOO).
+6.Darwin refers to the macOS operating system(Apple's Unix-based kernal).
+7.The rule for building the lsfr program is on line 31,the compile command line is line 32.
