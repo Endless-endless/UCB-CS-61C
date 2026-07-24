@@ -44,6 +44,25 @@ Color *evaluateOnePixel(Image *image, int row, int col)
 Image *steganography(Image *image)
 {
 	//YOUR CODE HERE
+    uint32_t width = image->cols;
+    uint32_t height = image->rows;
+
+    Image *ret = malloc(sizeof(Image));
+    ret -> cols = width;
+    ret -> rows = height;
+    ret -> image = malloc(height*sizeof(Color*));
+
+    for (uint32_t y = 0; y < height; y++)
+    {
+        ret->image[y] = malloc(width * sizeof(Color));
+        for (uint32_t x = 0; x < width; x++)
+        {
+            Color* new_pixel = evaluateOnePixel(image,y,x);
+            ret -> image[y][x] = *new_pixel;
+            free(new_pixel);
+        }
+    }
+    return ret;
 }
 
 /*
@@ -62,4 +81,28 @@ Make sure to free all memory before returning!
 int main(int argc, char **argv)
 {
 	//YOUR CODE HERE
+    if (argc != 2)
+    {
+        return -1;
+    }
+
+    Image* origin_img = readData(argv[1]);
+    if (origin_img == NULL)
+    {
+        return -1;
+    }
+
+    Image* secret_img = steganography(origin_img);
+    if (secret_img == NULL)
+    {
+        freeImage(origin_img);
+        return -1;
+    }   
+
+    writeData(secret_img);
+
+    freeImage(origin_img);
+    freeImage(secret_img);
+
+    return 0;
 }
