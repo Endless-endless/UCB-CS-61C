@@ -7,7 +7,7 @@
 ** AUTHOR:      Dan Garcia  -  University of California at Berkeley
 **              Copyright (C) Dan Garcia, 2020. All rights reserved.
 **				Justin Yokota - Starter Code
-**				YOUR NAME HERE
+**				YOUR NAME HERE Jemsem Wu
 **
 ** DATE:        2020-08-23
 **
@@ -22,6 +22,22 @@
 Color *evaluateOnePixel(Image *image, int row, int col)
 {
 	//YOUR CODE HERE
+	uint8_t bit = image->image[row][col].B & 1;
+
+    Color *res = malloc(sizeof(Color));
+    if (bit == 0)
+    {
+        res->R = 0;
+        res->G = 0;
+        res->B = 0;
+    }
+    else
+    {
+        res->R = 255;
+        res->G = 255;
+        res->B = 255;
+    }
+    return res;
 }
 
 //Given an image, creates a new image extracting the LSB of the B channel.
