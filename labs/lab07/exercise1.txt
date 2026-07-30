@@ -1,12 +1,21 @@
 Scenario 1
-    1.
-    2.
-    3.
+    1.Because step size in bytes is exactly equal to cache size in bytes.
+    2. 0.0
+      Checkoff 1 : Every memory access maps to the single cache set Set 0. 
+                   Each new write evicts the previous block stored in Set 0, so there are never any cache hits, no matter how many repetitions we run.
+    3.Sample answer (choose one): step size, 1
+      Checkoff 2 Two editable program parameters: step size, array size
 
 Scenario 2
-    1.
-    2.
-    3.
+    1. 3 memory accesses
+    2.Shortest repeating pattern : MHHH
+      Explanation: Cache block holds 4 int words (16B). Step size=2 accesses word0 then word2 in the same block. 
+      First word triggers a compulsory miss (MH), second word is fully cached (HH). 
+      Combined repeating sequence MHHH, 3 hits out of 4 total accesses → hit rate 0.75.
+    3.Hit rate as Rep Count approaches infinity, decimal value
+Decimal: 0.75
+Reason: The repeating MHHH pattern persists infinitely with no cache evictions. 
+The long-run average hit rate stays exactly 3/4 = 0.75.
 
 Scenario 3
     1.
