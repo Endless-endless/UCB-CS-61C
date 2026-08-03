@@ -1,8 +1,14 @@
-1.
-2.
+1.jki, kji
+2.ikj, kij
 
 --- lines below are ignored by the AG ---
 
-Checkoff Question 1:
-Checkoff Question 2:
-Checkoff Question 3:
+Checkoff Question 1:In jki and kji, the innermost variable is i.
+                    Array accesses C[i+j*n] and A[i+k*n] use i as the varying index, which results in stride-1 sequential memory access. 
+                    Good spatial locality minimizes cache misses and achieves maximum performance.
+Checkoff Question 2:In ikj and kij, innermost variable is j.
+                    Accesses to C and B use j as varying index, creating stride=n large jumps in memory. 
+                    Poor spatial locality causes frequent cache misses, leading to slow execution.
+Checkoff Question 3:The innermost loop executes far more iterations than outer loops.
+                    If the innermost variable creates stride-1 sequential memory access, we exploit spatial locality: cache lines hold consecutive elements, maximizing cache hits.
+                    If it creates large stride (stride=n), memory access jumps across distant locations. We lose spatial locality, trigger many cache misses, drastically slowing computation.
