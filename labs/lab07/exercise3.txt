@@ -1,20 +1,38 @@
 --- not autograded ---
 
 Part 1
-    blocksize = 20, n = 100: 
-    blocksize = 20, n = 1000: 
-    blocksize = 20, n = 2000: 
-    blocksize = 20, n = 5000: 
-    blocksize = 20, n = 10000: 
+blocksize = 20, n = 100:
+    naive: 0.035 ms, blocked: 0.003 ms
+blocksize = 20, n = 1000:
+    naive: 1.686 ms, blocked: 0.435 ms
+blocksize = 20, n = 2000:
+    naive: 10.756 ms, blocked: 3.328 ms
+blocksize = 20, n = 5000:
+    naive: 147.08 ms, blocked: 20.695 ms
+blocksize = 20, n = 10000:
+    naive: 720.961 ms, blocked: 85.42 ms
 
-    Checkoff Question 1:
-    Checkoff Question 2:
+Checkoff Question 1:
+The blocked transpose is faster than naive transpose starting at n=100 on this machine. The performance advantage becomes much more significant as matrix size increases beyond CPU cache capacity.
+
+Checkoff Question 2:
+When the matrix is very small, the entire matrix fits into CPU cache. The naive implementation already has few cache misses, and the extra loop overhead from blocking limits gains. 
+Once the matrix exceeds cache size, naive transpose suffers heavy cache misses caused by strided column access on dst. Blocking operates on small submatrices that fit into cache, improves memory locality and drastically reduces cache misses, resulting in large speedups.
+
 
 Part 2
-    blocksize = 50, n = 10000:
-    blocksize = 100, n = 10000:
-    blocksize = 500, n = 10000:
-    blocksize = 1000, n = 10000:
-    blocksize = 5000, n = 10000:
+blocksize = 50, n = 10000:
+    naive: 712.724 ms, blocked: 99.447 ms
+blocksize = 100, n = 10000:
+    naive: 762.613 ms, blocked: 92.365 ms
+blocksize = 500, n = 10000:
+    naive: 737.873 ms, blocked: 108.66 ms
+blocksize = 1000, n = 10000:
+    naive: 752.587 ms, blocked: 157.012 ms
+blocksize = 5000, n = 10000:
+    naive: 753.724 ms, blocked: 543.386 ms
 
-    Checkoff Question 3:
+Checkoff Question 3:
+As blocksize increases starting from a small value, runtime first decreases (performance improves). Too small block sizes introduce excessive loop overhead. 
+After passing the optimal blocksize, runtime rises again. Larger blocks exceed CPU cache capacity, causing more cache misses and losing the benefits of cache blocking. 
+Therefore performance gets worse if blocksize is too large.
