@@ -35,79 +35,78 @@ matmul:
 
     # 9 registers × 4 bytes = 36 bytes.
     # Allocate 48 bytes to keep the stack 16-byte aligned.
-    addi sp, sp, -48
-    sw ra, 0(sp)
-    sw s0, 4(sp)
-    sw s1, 8(sp)
-    sw s2, 12(sp)
-    sw s3, 16(sp)
-    sw s4, 20(sp)
-    sw s5, 24(sp)
-    sw s6, 28(sp)
-    sw s7, 32(sp)
+    addi sp,sp,-48
+    sw ra,0(sp)
+    sw s0,4(sp)
+    sw s1,8(sp)
+    sw s2,12(sp)
+    sw s3,16(sp)
+    sw s4,20(sp)
+    sw s5,24(sp)
+    sw s6,28(sp)
+    sw s7,32(sp)
 
-    mv s0, a0              # m0 base
-    mv s1, a3              # m1 base
-    mv s2, a6              # output base
-    mv s3, a1              # R: rows of m0
-    mv s4, a2              # K: cols of m0 / rows of m1
-    mv s5, a5              # C: cols of m1
+    mv s0,a0             # m0 base
+    mv s1,a3             # m1 base
+    mv s2,a6             # output base
+    mv s3,a1             # R: rows of m0
+    mv s4,a2             # K: cols of m0 / rows of m1
+    mv s5,a5             # C: cols of m1
 
-    li s6, 0               # i = 0
+    li s6,0               # i = 0
 
 outer_loop:
-    bge s6, s3, outer_done
-
-    li s7, 0               # j = 0
+    
+    bge s6,s3,outer_done
+    li s7,0               # j = 0
 
 inner_loop:
-    bge s7, s5, inner_done
+    bge s7,s5,inner_done
 
-    # a0 = address of row i in m0
-    # offset = i * K * 4
-    mul t0, s6, s4
-    slli t0, t0, 2
-    add a0, s0, t0
+    # a0 = address of row i in m0   offset = i * K * 4
+    mul t0,s6,s4
+    slli t0,t0,2
+    add a0,s0,t0
 
-    # a1 = address of element 0,j in m1
-    # offset = j * 4
-    slli t0, s7, 2
-    add a1, s1, t0
+    # a1 = address of element 0,j in m1   offset = j * 4
+    slli t0,s7,2
+    add a1,s1,t0
 
-    # dot(row i of m0, column j of m1, K, 1, C)
-    mv a2, s4
-    li a3, 1
-    mv a4, s5
+    #dot(row i of m0, column j of m1, K, 1, C)
+    mv a2,s4
+    li a3,1
+    mv a4,s5
 
-    jal ra, dot
+    jal ra,dot
 
     # d[i][j] address = d + (i * C + j) * 4
-    # Recompute after dot because t-registers are caller-saved.
-    mul t0, s6, s5
-    add t0, t0, s7
-    slli t0, t0, 2
-    add t0, s2, t0
+    mul t0,s6,s5
+    add t0,t0,s7
+    slli  t0,t0,2
+    add t0,s2,t0
+    sw a0,0(t0)
 
-    sw a0, 0(t0)
-
-    addi s7, s7, 1
+    addi s7,s7,1
     j inner_loop
 
 inner_done:
-    addi s6, s6, 1
+
+    addi s6,s6,1
     j outer_loop
 
 outer_done:
-    lw ra, 0(sp)
-    lw s0, 4(sp)
-    lw s1, 8(sp)
-    lw s2, 12(sp)
-    lw s3, 16(sp)
-    lw s4, 20(sp)
-    lw s5, 24(sp)
-    lw s6, 28(sp)
-    lw s7, 32(sp)
-    addi sp, sp, 48
+
+    lw ra,0(sp)
+    lw s0,4(sp)
+    lw s1,8(sp)
+    lw s2,12(sp)
+    lw s3,16(sp)
+    lw s4,20(sp)
+    lw s5,24(sp)
+    lw s6,28(sp)
+    lw s7,32(sp)
+    addi sp,sp,48
+
     ret
 
 err72:

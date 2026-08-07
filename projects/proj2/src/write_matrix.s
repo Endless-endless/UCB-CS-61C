@@ -25,16 +25,81 @@
 write_matrix:
 
     # Prologue
+    addi sp,sp,-32
 
+    sw ra,0(sp)
+    sw s0,4(sp)
+    sw s1,8(sp)
+    sw s2,12(sp)
+    sw s3,16(sp)
 
+    mv s1,a1
+    mv s2,a2
+    mv s3,a3
 
+    mv a1,a0
+    li a2,1
+    jal ra,fopen
+    mv s0,a0
+    li t0,-1
+    beq s0,t0,err_fopen
 
+    sw s2,20(sp)
+    sw s3,24(sp)
 
+    mv a1,s0
+    addi a2,sp,20
+    li a3,1
+    li a4,4
+    jal ra,fwrite
+    li t0,1
+    bne a0,t0,err_fwrite
 
+    mv a1,s0
+    addi a2,sp,24
+    li a3,1
+    li a4,4
+    jal ra,fwrite
+    li t0,1
+    bne a0,t0,err_fwrite
 
+    mul t0,s2,s3
+    mv a1,s0
+    mv a2,s1
+    mv a3,t0
+    li a4,4
+    jal ra,fwrite
+    mul t0,s2,s3
+    bne a0,t0,err_fwrite
 
+    mv a1,s0
+    jal ra,fclose
+    bne a0,zero,err_fclose
 
     # Epilogue
-
+    lw ra,0(sp)
+    lw s0,4(sp)
+    lw s1,8(sp)
+    lw s2,12(sp)
+    lw s3,16(sp)
+    addi sp,sp,32
 
     ret
+
+# ==============================================================================
+# Error handlers
+# ==============================================================================
+err_fopen:
+    li a1, 93
+    li a0, 17
+    ecall
+
+err_fwrite:
+    li a1, 94
+    li a0, 17
+    ecall
+
+err_fclose:
+    li a1, 95
+    li a0, 17
+    ecall
