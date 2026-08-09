@@ -1,19 +1,40 @@
 Exercise 1:
-    1.
-    2.
-    3.
+    1.32
+    2.3,7,0,7
+    3.No,Yes
 
 Exercise 2:
     1.
+    The virtual page number is encoded using only 3 bits, limiting us to 8 unique virtual pages. We cannot create 10 distinct unrepeated VPNs. The 9th access must reuse a VPN, leading to a Page Hit and breaking the requirement of 10 Page Faults.
 
 Exercise 3:
     1.
+    In the original setup, physical memory only holds 4 frames. When we reuse a VPN after its page has been evicted, every access triggers a page fault.
+    If we increase Physical Memory Size (more physical frames):
+    Repeated references to the same virtual page will find the page still resident in RAM.
+    These repeated accesses still cause a TLB miss (no valid entry exists in the TLB), but no new page fault occurs.
+    We retain the requirement of 10 TLB misses, while the total number of page faults drops below 10.
 
 --- lines below are ignored by the AG ---
 
 Exercise 1 Checkoff Questions:
     1.
+    The CPU splits the virtual address into a virtual page number (VPN) and an offset.
+    It first looks up the VPN in the TLB. Since there is no entry, we get a TLB miss.
+    We then access the page table stored in main memory, indexed by the VPN.
+    The valid bit is 0, so a page fault occurs.
+    The operating system loads the required page from disk into a free physical frame.
+    The OS updates the page table: set the physical page number (PPN) and mark the valid bit as 1.
+    The VPN-to-PPN mapping is also inserted into the TLB.
+    Finally, the physical address is formed by concatenating the PPN and the offset.
     2.
+    3 bits for the VPN means the virtual address space supports up to \(2^3 = 8\) virtual pages.
+    2 bits for the PPN means physical memory only contains \(2^2 = 4\) physical frames.
+    The virtual address space is larger than the physical memory capacity.
+    We use page replacement (LRU) to reuse the limited physical frames for all virtual pages.
 
 Exercise 4 Checkoff Question:
     1.
+    The VMSIM simulator runs four separate processes (P1, P2, P3, P4) that share a single TLB, while CAMERA only simulates one single process.
+    During context switches between these four processes, each process evicts the TLB entries belonging to the others.
+    When the system switches back to a previous process, its virtual page mappings are no longer cached in the TLB, leading to frequent TLB misses. This produces a much higher TLB miss rate than CAMERA’s single-process workload.
